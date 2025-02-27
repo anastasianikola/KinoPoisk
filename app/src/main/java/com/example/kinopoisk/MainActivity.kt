@@ -11,17 +11,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.replace
+import com.example.kinopoisk.ui.MovieListFragment
 import com.example.kinopoisk.ui.theme.KinoPoiskTheme
 
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContent {
-            KinoPoiskTheme {
+        setContentView(R.layout.activity_main)
 
-            }
-        }
+        val movieListFragment = MovieListFragment()
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, movieListFragment)
+            .commit()
     }
 }
 
