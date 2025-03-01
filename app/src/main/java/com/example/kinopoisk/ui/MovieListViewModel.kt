@@ -3,6 +3,7 @@ package com.example.kinopoisk.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kinopoisk.data.FilmsModel
+import com.example.kinopoisk.domain.MovieListState
 import com.example.kinopoisk.domain.RetrofitInstance
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,49 +13,48 @@ class MovieListViewModel : ViewModel() {
     private val _films = MutableStateFlow<List<FilmsModel>>(emptyList())
     val films: StateFlow<List<FilmsModel>> = _films
 
-    private val _errorMessage = MutableStateFlow<String?>(null)
-    val errorMessage: StateFlow<String?> = _errorMessage
+    private val _genres = MutableStateFlow<List<String>>(emptyList())
+    val genres: StateFlow<List<String>> = _genres
 
-    private val _state = MutableStateFlow(emptyList<FilmsModel>())
-    val state: StateFlow<List<FilmsModel>> = _state
-    private val _genres = MutableStateFlow<List<String?>>(emptyList())
-    val genres: StateFlow<List<String?>> = _genres
-    init{
+    private val _state = MutableStateFlow<MovieListState>(MovieListState.Loading)
+    val state: StateFlow<MovieListState> = _state
+
+    init {
         fetchFilms()
-        fetchGenres(_films.value)
     }
 
-    fun fetchFilms(){
+    private fun fetchFilms() {
         viewModelScope.launch {
-            try{
+            _state.value = MovieListState.Loading
+            try {
                 val response = RetrofitInstance.filmsApi.getFilms()
                 _films.value = response.films
-                _state.value = response.films
-                _errorMessage.value = null
                 fetchGenres(response.films)
-                println(response.films)
-            } catch (e: Exception){
-                _films.value = emptyList()
-                _errorMessage.value = "Ошибка подключения сети"
+                _state.value = MovieListState.Success(response.films)
+            } catch (e: Exception) {
+                _state.value = MovieListState.Error("Ошибка подключения сети")
             }
         }
     }
-    fun fetchGenres(films: List<FilmsModel>){
+
+    private fun fetchGenres(films: List<FilmsModel>) {
         viewModelScope.launch {
-            try{
-                val uniqueGenres  = films
+            try {
+                val uniqueGenres = films
                     .flatMap { it.genres }
                     .map { it.replaceFirstChar { char -> char.uppercaseChar() } }
                     .toSet()
                     .sorted()
                     .toList()
                 _genres.value = uniqueGenres
-                println(uniqueGenres)
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 _genres.value = emptyList()
-                _errorMessage.value = "Ошибка при извлечении категорий"
+                _state.value = MovieListState.Error("Ошибка при извлечении категорий")
             }
         }
     }
 
+    fun retry() {
+        fetchFilms()
+    }
 }

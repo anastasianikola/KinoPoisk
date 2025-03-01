@@ -43,6 +43,10 @@ android {
 }
 
 dependencies {
+    implementation("androidx.compose.foundation:foundation:1.6.0")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation("io.coil-kt:coil-compose:2.2.2")
     implementation("androidx.compose.ui:ui:1.5.4")
     implementation("androidx.compose.material:material:1.5.4")
@@ -52,25 +56,19 @@ dependencies {
     // Retrofit для сетевых запросов
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-
     // Koin для Dependency Injection
     implementation("io.insert-koin:koin-android:3.2.0")
-
     // ViewModel и LiveData
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
-
     // Navigation Component
     implementation("androidx.navigation:navigation-fragment-ktx:2.5.1")
     implementation("androidx.navigation:navigation-ui-ktx:2.5.1")
-
     // RecyclerView
     implementation("androidx.recyclerview:recyclerview:1.2.1")
-
     // Glide для загрузки изображений
     implementation("com.github.bumptech.glide:glide:4.13.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.13.0")
-
     // Material Design
     implementation("com.google.android.material:material:1.6.1")
     implementation(libs.androidx.core.ktx)
