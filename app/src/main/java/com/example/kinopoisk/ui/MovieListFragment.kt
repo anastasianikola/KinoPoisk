@@ -6,8 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -188,21 +191,33 @@ fun MovieListScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .wrapContentSize(align = Alignment.Center)
+                        .background(Color.White)
                 ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color(0xFF232323))
+                            .align(Alignment.BottomCenter)
+                            .padding(16.dp)
                     ) {
-                        Text(
-                            text = (state as MovieListState.Error).message,
-                            color = Color.Red,
-                            fontSize = 18.sp,
-                            modifier = Modifier.padding(16.dp)
-                        )
-                        Button(
-                            onClick = { viewModel.retry() }
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text("Повторить", color = SelectedColor)
+                            Text(
+                                text = (state as MovieListState.Error).message,
+                                color = Color.White,
+                                fontSize = 16.sp
+                            )
+                            Text(
+                                text = "Повторить",
+                                color = SelectedColor,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.clickable { viewModel.retry() }
+                            )
                         }
                     }
                 }
